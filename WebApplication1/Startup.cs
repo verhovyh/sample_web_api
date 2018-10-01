@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using WebApplication1.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Mvc;
 
 namespace WebApplication1
 {
@@ -28,7 +29,7 @@ namespace WebApplication1
         {
             //services.AddDbContext<TodoContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddDbContext<TodoContext>(options => options.UseInMemoryDatabase("foo"));
-            services.AddMvc().AddXmlDataContractSerializerFormatters();
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -39,12 +40,14 @@ namespace WebApplication1
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseStaticFiles();
+            app.UseDefaultFiles();
             app.UseMvc();
 
-            app.Run(async (context) =>
-            {
-                await context.Response.WriteAsync("MVC didn't find anything!");
-            });
+            //app.Run(async (context) =>
+            //{
+            //    await context.Response.WriteAsync("MVC didn't find anything!");
+            //});
         }
     }
 }
